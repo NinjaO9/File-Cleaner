@@ -29,11 +29,23 @@ class Custom_Folder:
         self.folder_name = new_name
         self.folder_path = self.main_path + self.folder_name
         
-    def transfer_files(self, new_folder) -> None:
+    def transfer_files(self, new_folder : str) -> None:
         if not (os.path.exists(self.main_path + new_folder)):
             os.makedirs(self.main_path + new_folder)
         
         for item in list(pathlib.Path(self.main_path).iterdir()):
             str(item).replace(self.folder_path, '') #get the item alone
             os.rename(self.folder_path + item, (self.main_path + new_folder) + item)
+
+    def add_extention(self, extention : str) -> None:
+        if extention in self.file_exts:
+            print(f"The extention {extention} already exists!")
+        else:
+            self.file_exts.append('.' + extention)
+
+    def remove_extention(self, extention : str) -> None:
+        try:
+            self.file_exts.remove(extention)
+        except ValueError as e:
+            print(f"Argument {extention} was not found in the current list of extentions!")
     
