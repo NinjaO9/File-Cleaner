@@ -4,7 +4,7 @@ class Custom_Folder:
 
     def __init__(self, dedicated_path : str, folder_name : str, file_extensions : list) -> None:
         self.main_path = dedicated_path
-        self.folder_name =  "\\" + folder_name #TODO: ensure that "folder name" doesn't have a backslash character in the first character of the string
+        self.folder_name = folder_name
         self.file_exts = file_extensions
         self.folder_path = self.main_path + self.folder_name # The reason I am making these into seperate values (dedicated path and folder name) is just incase I was more customizability between values
 
