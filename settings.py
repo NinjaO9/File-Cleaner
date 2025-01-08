@@ -37,4 +37,5 @@ class Save_Load:
         folders = []
         for folder in folders_data:
             folders.append(cls.from_dict(folder)) # Reconstruct the class from the information provided in the dict
+        cls.save_file.close()
         return folders
