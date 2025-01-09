@@ -102,19 +102,49 @@ class Folder_Actions:
     @classmethod
     def select_action(cls) -> int:
         choice = int(input("""
-        What would you like to do?
-        1) Change folder name
-        2) Add extention
-        3) Remove extention
+What would you like to do?
+1) Change folder name
+2) Add extention
+3) Remove extention
                            """))
         if choice < 1 or choice > 3: # Restart selection of choice if  'choice' doesnt match any of the allowed inputs (1-3)
             choice = cls.select_action()
         
         return choice
-
-        
-
-        
-        
-
     
+    @classmethod
+    def create_cf(cls, main_path) -> Custom_Folder:
+        extentions = []
+        name = ''
+
+        while (True): # Don't create duplicate instances of a folder
+            name = str(input("Enter a name for the custom folder: "))
+            if (os.path.exists(main_path + name)):
+                print("ERROR: Folder already exists!")
+            elif (str(input(f"(Y/N) Are you happy with the name: {name}?\n").upper() == 'y')):
+                break
+
+        if (name[0] != "\\"): # Formatting
+            name = "\\" + name
+        
+        extention = str(input("Enter extentions to add to this custom folder (Type 'Done' to exit): "))
+        while (extention.upper() != "DONE"):
+            extentions.append(extention)
+            extention = str(input("Enter extentions to add to this custom folder (Type 'Done' to exit): "))
+        
+        new_folder = Custom_Folder(main_path, name, extentions)
+
+
+        return new_folder
+    
+    @classmethod
+    def verify_newfolder(cls, nfolder : Custom_Folder) -> int:
+                print(f"""
+NEW FOLDER:
+    -PATH {nfolder.folder_path}
+    -NAME {nfolder.folder_name}
+    -ENTENTIONS {nfolder.file_exts}              
+""")
+                if (str(input("Are you happy with your choices?(Y/N): ")).upper() == 'Y'):
+                    return 1
+                return 0    
