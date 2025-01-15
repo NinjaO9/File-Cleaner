@@ -82,32 +82,39 @@ class Folder_Actions:
         file_num = 0
         choice = -1
         # list custom_folder and allow user to select what folder presets they want to edit
-        print("Which preset would you like to edit?\n")
-        for folder in custom_folders:
-            file_num += 1
-            print(f"{file_num}: {folder.folder_name}")
-        while choice > file_num or choice < 0:
-            choice = int(input(" "))  
-        file_num = (choice - 1) # repurposing file_num to hold the index of the folder that was selected
-
-        match (cls.select_action()):
-            case 1:
-                custom_folders[file_num].change_folder_name()
-            case 2:
-                custom_folders[file_num].add_extention(str(input("Type the extention you would like to add (exclude the '.')")))
-            case 3:
-                custom_folders[file_num].remove_extention(str(input("Type the extention you would like to remove (exclude the '.')")))
+        while True:
+            print("Which preset would you like to edit?\n")
+            for folder in custom_folders:
+                file_num += 1
+                print(f"{file_num}: {folder.folder_name}")
+            print("0: Back")
+            while choice > file_num or choice < 0:
+                choice = int(input(" "))  
+            file_num = (choice - 1) # repurposing file_num to hold the index of the folder that was selected
+            if choice == 0:
+                break
+            
+            match (cls.select_action()):
+                case 0:
+                    break
+                case 1:
+                    custom_folders[file_num].change_folder_name()
+                case 2:
+                    custom_folders[file_num].add_extention(str(input("Type the extention you would like to add (exclude the '.')")))
+                case 3:
+                    custom_folders[file_num].remove_extention(str(input("Type the extention you would like to remove (exclude the '.')")))
         
         
     @classmethod
     def select_action(cls) -> int:
         choice = int(input("""
 What would you like to do?
+0) Exit
 1) Change folder name
 2) Add extention
 3) Remove extention
                            """))
-        if choice < 1 or choice > 3: # Restart selection of choice if  'choice' doesnt match any of the allowed inputs (1-3)
+        if choice < 0 or choice > 3: # Restart selection of choice if  'choice' doesnt match any of the allowed inputs (1-3)
             choice = cls.select_action()
         
         return choice
@@ -118,7 +125,11 @@ What would you like to do?
         name = ''
 
         while (True): # Don't create duplicate instances of a folder
-            name = str(input("Enter a name for the custom folder: "))
+            name = str(input("Enter a name for the custom folder ('BACK' to go back): "))
+
+            if (name.upper() == 'BACK'):
+                return None
+            
             if (os.path.exists(main_path + name)):
                 print("ERROR: Folder already exists!")
             elif (str(input(f"(Y/N) Are you happy with the name: {name}?\n").upper() == 'y')):
@@ -139,12 +150,14 @@ What would you like to do?
     
     @classmethod
     def verify_newfolder(cls, nfolder : Custom_Folder) -> int:
-                print(f"""
+        if (nfolder == None):
+            return 0
+        print(f"""
 NEW FOLDER:
     -PATH {nfolder.folder_path}
     -NAME {nfolder.folder_name}
     -ENTENTIONS {nfolder.file_exts}              
 """)
-                if (str(input("Are you happy with your choices?(Y/N): ")).upper() == 'Y'):
-                    return 1
-                return 0    
+        if (str(input("Are you happy with your choices?(Y/N): ")).upper() == 'Y'):
+            return 1
+        return 0    
