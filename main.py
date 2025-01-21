@@ -4,11 +4,11 @@ import files, settings
 def main():
     prog_sav = settings.Save_Load()
 
-    print("Loading saved folder presets...")
     try:
         custom_folders = prog_sav.load_from_file()
+        print("Loaded saved folder presets")
     except JSONDecodeError as error:
-        print("An error occured when loading folder presets!")
+        custom_folders = []
         
     dedicated_path = files.Folder_Actions.get_dedicated_path()
     while True:
